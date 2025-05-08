@@ -1,5 +1,4 @@
 import { regularExps } from "../../../config";
-import { CustomError } from "../../errors/custom.error";
 
 export class RegisterUserDto {
 
@@ -17,7 +16,7 @@ export class RegisterUserDto {
         if( !email ) return ['Missing email'];
         if( !regularExps.email.test(email) ) return ['Email is not valid'];
         if( !password ) return ['Missing password'];
-        if( password.length < 6 ) return ['Missing password'];
+        if( password.length < 6 ) return ['Missing too short'];
 
         return [undefined, new RegisterUserDto(name, email, password)];
     }
