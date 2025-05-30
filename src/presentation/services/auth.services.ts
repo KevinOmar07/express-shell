@@ -1,4 +1,4 @@
-import { bcrypAdapter, envs, JwtAdapter } from "../../config";
+import { bcryptAdapter, envs, JwtAdapter } from "../../config";
 import { UserModel } from "../../data";
 import { CustomError, LoginUserDto, RegisterUserDto, UserEntity } from "../../domain";
 import { EmailService } from "./email.services";
@@ -19,7 +19,7 @@ export class AuthService {
 
             const user = new UserModel(registerDto);
 
-            user.password = bcrypAdapter.hash(registerDto.password);
+            user.password = bcryptAdapter.hash(registerDto.password);
 
             await user.save();
 
@@ -44,7 +44,7 @@ export class AuthService {
         const user = await UserModel.findOne({ email: loginUserDto.email });
         if (!user) throw CustomError.badRequest('Invalid email or password');
 
-        const isMatching = bcrypAdapter.compare( loginUserDto.password, user.password);
+        const isMatching = bcryptAdapter.compare( loginUserDto.password, user.password);
         if( !isMatching ) throw CustomError.badRequest('Invalid email or password');
 
         const { password, ...restUser} = UserEntity.fromObject(user);
